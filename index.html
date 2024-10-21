@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Age Calculator</h1>
+        <label for="dob">Enter your Date of Birth:</label>
+        <input type="date" id="dob" required>
+        <button onclick="calculateAge()">Calculate Age</button>
+        <button id="reset" onclick="resetForm()">Reset</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateAge() {
+            const dob = new Date(document.getElementById('dob').value);
+            const today = new Date();
+            
+            if (isNaN(dob.getTime())) {
+                document.getElementById('result').textContent = "Please enter a valid date of birth.";
+                return;
+            }
+
+            let years = today.getFullYear() - dob.getFullYear();
+            let months = today.getMonth() - dob.getMonth();
+            let days = today.getDate() - dob.getDate();
+
+            // Adjust for negative months or days
+            if (days < 0) {
+                months--;
+                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            // Format the result string
+            let result = `Your age is `;
+            if (years > 0) result += `${years} year${years !== 1 ? 's' : ''}`;
+            if (months > 0) result += `${years > 0 ? ', ' : ''}${months} month${months !== 1 ? 's' : ''}`;
+            if (days > 0 || (years === 0 && months === 0)) result += `${(years > 0 || months > 0) ? ' and ' : ''}${days} day${days !== 1 ? 's' : ''}`;
+
+            document.getElementById('result').textContent = result + '.';
+        }
+
+        function resetForm() {
+            document.getElementById('dob').value = '';
+            document.getElementById('result').textContent = '';
+        }
+    </script>
+</body>
+</html>
